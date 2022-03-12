@@ -1,65 +1,211 @@
 const express = require('express')
 const router = express.Router()
+const diffService = require('../services/index')
 
-const mockedHeaders = [
-  '_id',
-  'someKey',
-  'meta_subKey1',
-  'meta_subKey2',
-  'meta_subKey3',
-]
-
-const mockedData = [
+const prevArray = [
   {
-    _id: {
-      value: 1,
-      class: ''
-    },
-    someKey: {
-      value: 'HANGUP',
-      class: 'fw-bold'
-    },
-    meta_subKey1: {
-      value: 1234,
-      class: ''
-    },
-    meta_subKey2: {
-      value: 'DELETED',
-      class: 'fw-bold'
-    },
-    meta_subKey3: {
-      value: '',
-      class: ''
-    },
+    id: "23b9dbff",
+    name: "Jessie",
+    age: 50,
+    children: [
+      {
+        id: "5c0f3094",
+        name: "Peter",
+        age: 20
+      },
+      {
+        id: "c1484221",
+        name: "Paul",
+        age: 32,
+        children: [
+          {
+            id: "2e6d866e",
+            name: "Carol",
+            age: 12
+          },
+          {
+            id: "e48a27ad",
+            name: "Hester",
+            age: 15
+          }
+        ]
+      },
+      {
+        id: "8a265c23",
+        name: "Hilda",
+        age: 25
+      }
+    ]
   },
   {
-    _id: {
-      value: 2,
-      class: 'fw-bold'
-    },
-    someKey: {
-      value: 'RINGING',
-      class: 'fw-bold'
-    },
-    meta_subKey1: {
-      value: 5678,
-      class: 'fw-bold'
-    },
-    meta_subKey2: {
-      value: 207,
-      class: 'fw-bold'
-    },
-    meta_subKey3: {
-      value: 52,
-      class: 'fw-bold'
-    },
+    id: "53164b2b",
+    name: "Mathew",
+    age: 70,
+    children: [
+      {
+        id: "b14a960c",
+        name: "Spencer",
+        age: 45,
+        children: [
+          {
+            id: "ff3c260c",
+            name: "Joseph",
+            age: 22
+          },
+          {
+            id: "7c60920a",
+            name: "Robert",
+            age: 27,
+            children: [
+              {
+                id: "0e11874f",
+                name: "Ian",
+                age: 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "5a4bdc98",
+    name: "Claire",
+    age: 63,
+    children: [
+      {
+        id: "014b62a3",
+        name: "Adrian",
+        age: 41
+      },
+      {
+        id: "a1899541",
+        name: "Julie",
+        age: 32,
+        children: [
+          {
+            id: "013362a3",
+            name: "Patricia",
+            age: 4
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "5a4b4fh98",
+    name: "Sergio",
+    age: 30,
+  }
+]
+
+const currArray = [
+  {
+    id: "23b9dbff",
+    name: "Jessie",
+    age: 50,
+    children: [
+      {
+        id: "5c0f3094",
+        name: "Pedro",
+        age: 20
+      },
+      {
+        id: "c1484221",
+        name: "Paulo",
+        age: 32,
+        children: [
+          {
+            id: "2e6d866e",
+            name: "Carol",
+            age: 12
+          },
+          {
+            id: "e48a27ad",
+            name: "Hester",
+            age: 15
+          }
+        ]
+      },
+      {
+        id: "8a265c23",
+        name: "Hilda",
+        age: 25
+      }
+    ]
+  },
+  {
+    id: "5a4bdc98",
+    name: "Claire",
+    age: 63,
+    children: [
+      {
+        id: "014b62a3",
+        name: "Adrian",
+        age: 45
+      },
+      {
+        id: "a1899541",
+        name: "Julie",
+        age: 32,
+        children: [
+          {
+            id: "013362a3",
+            name: "Patricia",
+            age: 41
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "514bs4fh4",
+    name: "Cindy",
+    age: 29,
+    children: [
+      {
+        id: "b13a910c",
+        name: "Nicolas",
+        age: 1,
+      }
+    ]
+  },
+  {
+    id: "53164b2b",
+    name: "Mateus",
+    age: 70,
+    children: [
+      {
+        id: "b14a960c",
+        name: "Spencer",
+        age: 45,
+        children: [
+          {
+            id: "ff3c260c",
+            name: "Jose",
+            age: 32
+          },
+          {
+            id: "7c60920a",
+            name: "Robert",
+            age: 27,
+            children: [
+              {
+                id: "0e11874f",
+                name: "Ian",
+                age: 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
 
 router.get('/', (req, res) => {
   res.render('diff-table', {
-    tableHeaders: mockedHeaders,
-    tableData: mockedData,
+    tableHTML: diffService.arrayDiffToHtmlTable(prevArray, currArray),
   })
 })
 
