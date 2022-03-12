@@ -1,0 +1,11 @@
+{
+  "name": "array-diff-table",
+  "version": "1.0.0",
+  "description": "Takes two arguments, flattens the objects and returns an HTML Table of the values.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sergio Gomes",
+  "license": "ISC"
+}
