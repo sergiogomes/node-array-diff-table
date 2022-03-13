@@ -17,7 +17,6 @@ const prevArray = [
           {
             id: "2e6d866e",
             name: "Carol",
-            age: 12
           },
           {
             id: "e48a27ad",
@@ -29,7 +28,6 @@ const prevArray = [
       {
         id: "8a265c23",
         name: "Hilda",
-        age: 25
       }
     ]
   },
@@ -99,12 +97,12 @@ const currArray = [
   {
     id: "23b9dbff",
     name: "Jessie",
-    age: 50,
+    age: 51,
     children: [
       {
         id: "5c0f3094",
         name: "Pedro",
-        age: 20
+        somekey: "HAHA",
       },
       {
         id: "c1484221",
@@ -119,7 +117,7 @@ const currArray = [
           {
             id: "e48a27ad",
             name: "Hester",
-            age: 15
+            somekey: "Hestersome",
           }
         ]
       },
@@ -137,7 +135,6 @@ const currArray = [
     children: [
       {
         id: "014b62a3",
-        name: "Adrian",
         age: 45
       },
       {

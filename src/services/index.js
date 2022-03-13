@@ -6,7 +6,7 @@ const myFlatFunction = (ob) => {
       for (let k = 0; k < ob[i].length; k++) {
         const temp = myFlatFunction(ob[i][k]);
         for (const j in temp) {
-          result[i + '_' + j] = temp[j];
+          result[i + k + '_' + j] = temp[j];
         }
       }
     } else if ((typeof ob[i]) === 'object') {
@@ -42,7 +42,7 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
     const resultArrayHeader = []
     const resultArrayPrevData = []
     const resultArrayCurrData = []
-    let count = 1
+    let count = 0
 
     flattenPrevArray.forEach(prevOb => {
       const currFoundId = flattenCurrArray.findIndex(currOb => currOb.id === prevOb.id)
