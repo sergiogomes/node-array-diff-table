@@ -1,32 +1,78 @@
 const myFlatFunction = (ob) => {
-  let result = {};
+  let result = {}
   
   for (const i in ob) {
     if (Array.isArray(ob[i])) {
       for (let k = 0; k < ob[i].length; k++) {
-        const temp = myFlatFunction(ob[i][k]);
+        const temp = myFlatFunction(ob[i][k])
         for (const j in temp) {
-          result[i + k + '_' + j] = temp[j];
+          result[i + k + '_' + j] = temp[j]
         }
       }
     } else if ((typeof ob[i]) === 'object') {
-      const temp = myFlatFunction(ob[i]);
+      const temp = myFlatFunction(ob[i])
       for (const j in temp) {
-        result[i + '_' + j] = temp[j];
+        result[i + '_' + j] = temp[j]
       }
     } else {
-      result[i] = ob[i];
+      result[i] = ob[i]
     }
   }
 
-  return result;
-};
+  return result
+}
 
 const reduceToFlat = arr => {
   return arr.reduce((acc, curr) => {
     acc.push(myFlatFunction(curr))
     return acc
   }, [])
+}
+
+const generateTableHeader = arr => {
+  let html = ''
+  arr.forEach(h => {
+    html += `<th scope="col">${h}</th>`
+  })
+
+  return html
+}
+
+const generateTableDoc = arr => {
+  let html = ''
+  arr.forEach(d => {
+    html += `<td ${d.class ? 'class="'+d.class+'"' : ''}>${d.value}</td>`
+  })
+
+  return html
+}
+
+const turnArrayIntoObj = (arr) => {
+  return arr.reduce((acc, curr) => {
+    acc[curr.id] = curr
+    return acc
+  }, {})
+}
+
+const generateHTML = (arrayHeader, arrayPreviousData, arrayCurrentData) => {
+  let html = ''
+  html += '<table class="d-block overflow-scroll table table-striped table-bordered table-hover">'
+  html += '<thead>'
+  html += '<tr>'
+  html += generateTableHeader(arrayHeader)
+  html += '</tr>'
+  html += '</thead>'
+  html += '<tbody>'
+  html += '<tr>'
+  html += generateTableDoc(arrayPreviousData)
+  html += '</tr>'
+  html += '<tr>'
+  html += generateTableDoc(arrayCurrentData)
+  html += '</tr>'
+  html += '</tbody>'
+  html += '</table>'
+
+  return html
 }
 
 /*
@@ -38,11 +84,7 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
   try {
     const flattenPreviousArray = reduceToFlat(prevArray)
     const flattenCurrentArray = reduceToFlat(currArray)
-
-    const flattenCurrentObject = flattenCurrentArray.reduce((acc, curr) => {
-      acc[curr.id] = curr;
-      return acc;
-    }, {});
+    const flattenCurrentObject = turnArrayIntoObj(flattenCurrentArray)
     
     let count = 0
     const resultArrayHeader = []
@@ -107,44 +149,9 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
       count ++
     }
 
-
-    let html = ''
-    html += '<table class="d-block overflow-scroll table table-striped table-bordered table-hover">'
-    html += '<thead>'
-    html += '<tr>'
-    html += generateTableHeader(resultArrayHeader)
-    html += '</tr>'
-    html += '</thead>'
-    html += '<tbody>'
-    html += '<tr>'
-    html += generateTableDoc(resultArrayPreviousData)
-    html += '</tr>'
-    html += '<tr>'
-    html += generateTableDoc(resultArrayCurrentData)
-    html += '</tr>'
-    html += '</tbody>'
-    html += '</table>'
-
-    return html
+    return generateHTML(resultArrayHeader, resultArrayPreviousData, resultArrayCurrentData)
   } catch (error) {
     console.error(error)
     return null 
   }
-}
-const generateTableHeader = arr => {
-  let html = ''
-  arr.forEach(h => {
-    html += `<th scope="col">${h}</th>`
-  })
-
-  return html
-}
-
-const generateTableDoc = arr => {
-  let html = ''
-  arr.forEach(d => {
-    html += `<td ${d.class ? 'class="'+d.class+'"' : ''}>${d.value}</td>`
-  })
-
-  return html
 }
