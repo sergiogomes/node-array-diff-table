@@ -22,24 +22,22 @@ const myFlatFunction = (ob) => {
   return result;
 };
 
+const reduceToFlat = arr => {
+  return arr.reduce((acc, curr) => {
+    acc.push(myFlatFunction(curr))
+    return acc
+  }, [])
+}
+
 /*
  * @param prevArray is an array of objects
  * @param currArray is an array of objects
  * @return a string with HTML markup in it, should return null if error occurs.
  */
-module.exports.arrayDiffToHtmlTable = function( prevArray, currArray) {
+module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
   try {
-    
-    
-    const flattenPrevArray = prevArray.reduce((acc, curr) => {
-      acc.push(myFlatFunction(curr))
-      return acc
-    }, [])
-
-    const flattenCurrArray = currArray.reduce((acc, curr) => {
-      acc.push(myFlatFunction(curr))
-      return acc
-    }, [])
+    const flattenPrevArray = reduceToFlat(prevArray)
+    const flattenCurrArray = reduceToFlat(currArray)
 
     const resultArrayHeader = []
     const resultArrayPrevData = []
