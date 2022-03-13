@@ -59,21 +59,23 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
 
         for (const prevI in prevOb) {
           resultArrayHeader.push(prevI + count)
-          resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
 
           if (Object.hasOwnProperty.call(currOb, prevI)) {
             // Same key value
             if (prevOb[prevI] === currOb[prevI]) {
+              resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
               resultArrayCurrData.push({ key: prevI + count, value: currOb[prevI] })
             }
             // Value changed
             else {
+              resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI], class: 'bg-danger bg-opacity-10' })
               resultArrayCurrData.push({ key: prevI + count, value: currOb[prevI], class: 'fw-bold bg-success bg-opacity-10' })
             }
             delete currOb[prevI]
           }
           // Deleted key
           else {
+            resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
             resultArrayCurrData.push({ key: prevI + count, value: 'DELETED', class: 'fw-bold bg-danger bg-opacity-10' })
           }
         }
@@ -81,7 +83,7 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
         // Added keys
         for (const currI in currOb) {
           resultArrayHeader.push(currI + count,)
-          resultArrayPrevData.push({ key: currI + count, value: '' })
+          resultArrayPrevData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
           resultArrayCurrData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
         }
 
@@ -95,7 +97,7 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
       // Added keys
       for (const currI in currOb) {
         resultArrayHeader.push(currI + count,)
-        resultArrayPrevData.push({ key: currI + count, value: '' })
+        resultArrayPrevData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
         resultArrayCurrData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
       }
 
