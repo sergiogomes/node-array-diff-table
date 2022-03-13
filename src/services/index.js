@@ -36,73 +36,76 @@ const reduceToFlat = arr => {
  */
 module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
   try {
-    const flattenPrevArray = reduceToFlat(prevArray)
-    const flattenCurrArray = reduceToFlat(currArray)
+    const flattenPreviousArray = reduceToFlat(prevArray)
+    const flattenCurrentArray = reduceToFlat(currArray)
 
-    const resultArrayHeader = []
-    const resultArrayPrevData = []
-    const resultArrayCurrData = []
+    const flattenCurrentObject = flattenCurrentArray.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {});
+    
     let count = 0
+    const resultArrayHeader = []
+    const resultArrayPreviousData = []
+    const resultArrayCurrentData = []
 
-    flattenPrevArray.forEach(prevOb => {
-      const currFoundId = flattenCurrArray.findIndex(currOb => currOb.id === prevOb.id)
-
-      // Deleted keys
-      if (currFoundId === -1) {
-        for (const prevI in prevOb) {
-          resultArrayHeader.push(prevI + count)
-          resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
-          resultArrayCurrData.push({ key: prevI + count, value: 'DELETED', class: 'fw-bold bg-danger bg-opacity-10' })
-        }
-      } else {
-        const currOb = flattenCurrArray[currFoundId]
+    flattenPreviousArray.forEach(prevOb => {
+      if (Object.hasOwnProperty.call(flattenCurrentObject, prevOb.id)) {
+        const currOb = flattenCurrentObject[prevOb.id]
 
         for (const prevI in prevOb) {
           resultArrayHeader.push(prevI + count)
-
+    
           if (Object.hasOwnProperty.call(currOb, prevI)) {
             // Same key value
             if (prevOb[prevI] === currOb[prevI]) {
-              resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
-              resultArrayCurrData.push({ key: prevI + count, value: currOb[prevI] })
+              resultArrayPreviousData.push({ key: prevI + count, value: prevOb[prevI] })
+              resultArrayCurrentData.push({ key: prevI + count, value: currOb[prevI] })
             }
             // Value changed
             else {
-              resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI], class: 'bg-danger bg-opacity-10' })
-              resultArrayCurrData.push({ key: prevI + count, value: currOb[prevI], class: 'fw-bold bg-success bg-opacity-10' })
+              resultArrayPreviousData.push({ key: prevI + count, value: prevOb[prevI], class: 'bg-danger bg-opacity-10' })
+              resultArrayCurrentData.push({ key: prevI + count, value: currOb[prevI], class: 'fw-bold bg-success bg-opacity-10' })
             }
             delete currOb[prevI]
           }
           // Deleted key
           else {
-            resultArrayPrevData.push({ key: prevI + count, value: prevOb[prevI] })
-            resultArrayCurrData.push({ key: prevI + count, value: 'DELETED', class: 'fw-bold bg-danger bg-opacity-10' })
+            resultArrayPreviousData.push({ key: prevI + count, value: prevOb[prevI] })
+            resultArrayCurrentData.push({ key: prevI + count, value: 'DELETED', class: 'fw-bold bg-danger bg-opacity-10' })
           }
         }
-
+    
         // Added keys
         for (const currI in currOb) {
           resultArrayHeader.push(currI + count,)
-          resultArrayPrevData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
-          resultArrayCurrData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
+          resultArrayPreviousData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
+          resultArrayCurrentData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
         }
-
-        flattenCurrArray.splice(currFoundId, 1)
+    
+        delete flattenCurrentObject[prevOb.id]
+      } else {
+        for (const prevI in prevOb) {
+          resultArrayHeader.push(prevI + count)
+          resultArrayPreviousData.push({ key: prevI + count, value: prevOb[prevI] })
+          resultArrayCurrentData.push({ key: prevI + count, value: 'DELETED', class: 'fw-bold bg-danger bg-opacity-10' })
+        }
       }
 
       count ++
     })
-
-    flattenCurrArray.forEach(currOb => {
+    
+    for (const i in flattenCurrentObject) {
+      const currOb = flattenCurrentObject[i]
       // Added keys
       for (const currI in currOb) {
         resultArrayHeader.push(currI + count,)
-        resultArrayPrevData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
-        resultArrayCurrData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
+        resultArrayPreviousData.push({ key: currI + count, value: '', class: 'bg-danger bg-opacity-10' })
+        resultArrayCurrentData.push({ key: currI + count, value: currOb[currI], class: 'fw-bold bg-success bg-opacity-10' })
       }
 
       count ++
-    })
+    }
 
 
     let html = ''
@@ -114,10 +117,10 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
     html += '</thead>'
     html += '<tbody>'
     html += '<tr>'
-    html += generateTableDoc(resultArrayPrevData)
+    html += generateTableDoc(resultArrayPreviousData)
     html += '</tr>'
     html += '<tr>'
-    html += generateTableDoc(resultArrayCurrData)
+    html += generateTableDoc(resultArrayCurrentData)
     html += '</tr>'
     html += '</tbody>'
     html += '</table>'
