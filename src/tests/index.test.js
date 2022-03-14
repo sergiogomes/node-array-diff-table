@@ -18,14 +18,14 @@ describe('index service', () => {
 
   describe('turnArrayIntoObj', () => {
     it('should transform an array of objects into a key value objects with the id as the key', () => {
-      const expected = {
-        '12345': { id: 12345, name: 'Sergio', age: 30 },
-        '12245': { id: 12245, name: 'Cindy', age: 29 }
-      }
       const arr = [
         { id: 12345, name: 'Sergio', age: 30 },
         { id: 12245, name: 'Cindy', age: 29 },
       ]
+      const expected = {
+        '12345': { id: 12345, name: 'Sergio', age: 30 },
+        '12245': { id: 12245, name: 'Cindy', age: 29 }
+      }
       
       const result = indexService.turnArrayIntoObj(arr)
       expect(result).to.deep.equal(expected)
@@ -33,8 +33,12 @@ describe('index service', () => {
   })
 
   describe('generateTableHeader', () => {
-    it('should ', () => {
+    it('should generate a string with html table header columns', () => {
+      const arr = ['id', 'name', 'age']
+      const expected = '<th scope="col">id</th><th scope="col">name</th><th scope="col">age</th>'
 
+      const result = indexService.generateTableHeader(arr)
+      expect(result).to.equal(expected)
     })
   })
 
