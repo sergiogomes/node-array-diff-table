@@ -43,14 +43,39 @@ describe('index service', () => {
   })
 
   describe('generateTableDoc', () => {
-    it('should ', () => {
+    it('should generate a string with html table body row', () => {
+      const arr = [
+        { value: '12345', class: ''},
+        { value: 'Sergio', class: 'bg-danger bg-opacity-10'},
+        { value: '30', class: ''},
+        { value: '', class: 'bg-danger bg-opacity-10'}
+      ]
+      const expected = '<td >12345</td><td class="bg-danger bg-opacity-10">Sergio</td><td >30</td><td class="bg-danger bg-opacity-10"></td>'
 
+      const result = indexService.generateTableDoc(arr)
+      expect(result).to.equal(expected)
     })
   })
 
   describe('generateHTML', () => {
-    it('should ', () => {
+    it('should generate a string with html table with two rows', () => {
+      const arrHeader = ['id', 'name', 'age', 'birth']
+      const arrRowOne = [
+        { value: '12345', class: ''},
+        { value: 'Sergio', class: 'bg-danger bg-opacity-10'},
+        { value: '30', class: ''},
+        { value: '', class: 'bg-danger bg-opacity-10'}
+      ]
+      const arrRowTwo = [
+        { value: '12345', class: ''},
+        { value: 'Sergio Gomes', class: 'fw-bold bg-success bg-opacity-10'},
+        { value: '', class: 'bg-danger bg-opacity-10'},
+        { value: '1992', class: 'bg-success bg-opacity-10'}
+      ]
+      const expected = '<table class="d-block overflow-scroll table table-striped table-bordered table-hover"><thead><tr><th scope="col">id</th><th scope="col">name</th><th scope="col">age</th><th scope="col">birth</th></tr></thead><tbody><tr><td >12345</td><td class="bg-danger bg-opacity-10">Sergio</td><td >30</td><td class="bg-danger bg-opacity-10"></td></tr><tr><td >12345</td><td class="fw-bold bg-success bg-opacity-10">Sergio Gomes</td><td class="bg-danger bg-opacity-10"></td><td class="bg-success bg-opacity-10">1992</td></tr></tbody></table>'
 
+      const result = indexService.generateHTML(arrHeader, arrRowOne, arrRowTwo)
+      expect(result).to.equal(expected)
     })
   })
 
