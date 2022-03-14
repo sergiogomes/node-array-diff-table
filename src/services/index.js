@@ -29,6 +29,13 @@ const reduceToFlat = arr => {
   }, [])
 }
 
+const turnArrayIntoObj = arr => {
+  return arr.reduce((acc, curr) => {
+    acc[curr.id] = curr
+    return acc
+  }, {})
+}
+
 const generateTableHeader = arr => {
   let html = ''
   arr.forEach(h => {
@@ -45,13 +52,6 @@ const generateTableDoc = arr => {
   })
 
   return html
-}
-
-const turnArrayIntoObj = arr => {
-  return arr.reduce((acc, curr) => {
-    acc[curr.id] = curr
-    return acc
-  }, {})
 }
 
 const generateHTML = (arrayHeader, arrayPreviousData, arrayCurrentData) => {
@@ -159,9 +159,9 @@ const arrayDiffToHtmlTable = (prevArray, currArray) => {
 module.exports = {
   myFlatFunction,
   reduceToFlat,
+  turnArrayIntoObj,
   generateTableHeader,
   generateTableDoc,
-  turnArrayIntoObj,
   generateHTML,
   arrayDiffToHtmlTable,
 }
