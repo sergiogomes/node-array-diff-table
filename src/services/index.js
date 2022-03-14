@@ -1,4 +1,4 @@
-const myFlatFunction = (ob) => {
+const myFlatFunction = ob => {
   let result = {}
   
   for (const i in ob) {
@@ -29,6 +29,13 @@ const reduceToFlat = arr => {
   }, [])
 }
 
+const turnArrayIntoObj = arr => {
+  return arr.reduce((acc, curr) => {
+    acc[curr.id] = curr
+    return acc
+  }, {})
+}
+
 const generateTableHeader = arr => {
   let html = ''
   arr.forEach(h => {
@@ -45,13 +52,6 @@ const generateTableDoc = arr => {
   })
 
   return html
-}
-
-const turnArrayIntoObj = (arr) => {
-  return arr.reduce((acc, curr) => {
-    acc[curr.id] = curr
-    return acc
-  }, {})
 }
 
 const generateHTML = (arrayHeader, arrayPreviousData, arrayCurrentData) => {
@@ -80,7 +80,7 @@ const generateHTML = (arrayHeader, arrayPreviousData, arrayCurrentData) => {
  * @param currArray is an array of objects
  * @return a string with HTML markup in it, should return null if error occurs.
  */
-module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
+const arrayDiffToHtmlTable = (prevArray, currArray) => {
   try {
     const flattenPreviousArray = reduceToFlat(prevArray)
     const flattenCurrentArray = reduceToFlat(currArray)
@@ -154,4 +154,14 @@ module.exports.arrayDiffToHtmlTable = (prevArray, currArray) => {
     console.error(error)
     return null 
   }
+}
+
+module.exports = {
+  myFlatFunction,
+  reduceToFlat,
+  turnArrayIntoObj,
+  generateTableHeader,
+  generateTableDoc,
+  generateHTML,
+  arrayDiffToHtmlTable,
 }
